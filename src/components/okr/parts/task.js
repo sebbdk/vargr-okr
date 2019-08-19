@@ -23,7 +23,7 @@ const OkrTask = ({ task, onChange }) => {
         <input
           type="checkbox"
           defaultChecked={currentValue.status === 1}
-          onChange={evt => changed({ status: evt.target.checked ? 1 : 0 })} 
+          onChange={evt => changed({ status: evt.target.checked ? 1 : 0 })}
           />
     </div>
   )

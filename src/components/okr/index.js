@@ -9,40 +9,52 @@ import Objective from './parts/objective';
 import OkrTaskAdd from './parts/task-add';
 import OkrTask from './parts/task';
 
-import { getGroupedTasks, updateTask, addTask } from '../../store/okr';
+import { getGroupedTasks, updateTask, addTask, updateObjective, updateKeyResult, updateListName } from '../../store/okr';
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
 	return {
-		groupedTasks: getGroupedTasks(state)
+		groupedTasks: getGroupedTasks(state),
+		objective: state.okr.primaryObjective,
+		keyResults: state.okr.keyResults,
 	};
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		updateTask,
-		addTask
+		addTask,
+		updateObjective,
+		updateKeyResult,
+		updateListName
 	}, dispatch);
 }
 
-function groupedProps(groupedTasks, updateTask, addTask = () => {} ) {
+function groupedProps(groupedTasks, updateTask, addTask, updateListName ) {
 	return groupedTasks.map((group) => {
 		const tasks = group.tasks.map((task, i) =>
 			<OkrTask task={task} key={i} onChange={updatedTask => updateTask(updatedTask)}></OkrTask>
 		);
 
 		return <div className="okr-task-list" key={group.id}>
-			<OkrListName></OkrListName>
+			<OkrListName value={group.title} onChange={title => updateListName(title, group.id)}></OkrListName>
 			{tasks}
 			<OkrTaskAdd groupId={group.id} onComplete={newTask => addTask(newTask)}></OkrTaskAdd>
 		</div>;
 	})
 }
 
-const Okr = ({ groupedTasks, updateTask, addTask }) => {
+const Okr = ({ groupedTasks, updateTask, addTask, keyResults, objective, updateObjective, updateKeyResult, updateListName }) => {
+	console.log(objective)
+
 	return (
 		<div className="okr-page">
-			<Objective></Objective>
-			{groupedProps(groupedTasks, updateTask, addTask)}
+			<Objective
+				keyResults={keyResults}
+				objective={objective}
+				onKeyResultChange={(val, i) => updateKeyResult(val, i)}
+				onObjectiveChange={val => updateObjective(val)}>
+			</Objective>
+			{groupedProps(groupedTasks, updateTask, addTask, updateListName)}
 		</div>
 	)
 }
