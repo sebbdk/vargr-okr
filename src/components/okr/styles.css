@@ -33,6 +33,10 @@ input:focus {
     outline:0;
 }
 
+button {
+    cursor: pointer;
+}
+
 .okr-objective {
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -98,6 +102,12 @@ input[type="text"].okr-primary-objective  {
     font-size: 1rem;
 }
 
+.okr-list-name button {
+    position: absolute;
+    right: 1rem;
+    top: 0.73rem;
+}
+
 .okr-page {
     max-width: 800px;
     margin: auto;
@@ -148,4 +158,16 @@ input[type="text"].okr-primary-objective  {
     height: 100%;
     width: 1rem;
     font-size: 1.5rem;
+}
+
+.okr-add-group {
+    position: relative;
+    height: 1.5rem;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    position: relative;
+}
+
+.okr-add-group button {
+    margin: auto;
 }

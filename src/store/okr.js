@@ -1,21 +1,29 @@
 export const initialState = {
-    primaryObjective: 'Gimma a primary!',
+    primaryObjective: 'Finish projects & improve skillset',
     keyResults: [
-        'Result A',
-        'Result B',
-        'Result C'
+        'Complete Math C',
+        'Complete 4 projects',
+        'Get detailed gold trading data for last 5 years'
     ],
     taskGroups: [
-        { title: 'Backlog', id: -1 },
-        { title: 'Current sprint!', id: 0 },
-        { title: 'Next sprint!', id: 1 }
+        { title: 'Backlog', id: 9999999 },
+        { title: 'Some future sprint!', id: 1 },
+        { title: 'Current sprint!', id: 0 }
     ],
     tasks: [
-        { id: '0', title: 'some task A', groupId: 0, status: 0 },
-        { id: '1', title: 'some task B', groupId: 0, status: 1 },
-        { id: '2', title: 'some task C', groupId: 1, status: 0 },
-        { id: '3', title: 'some task D', groupId: 1, status: 0 },
-        { id: '4', title: 'some task ÆØÅ', groupId: -1, status: 0 }
+        { id: 0, title: '[OKR Sys] Add group', groupId: 0, status: 0 },
+        { id: 1, title: '[OKR Sys] Close group', groupId: 0, status: 0 },
+        { id: 2, title: '[OKR Sys] Move tasks', groupId: 0, status: 0 },
+        { id: 3, title: '[OKR Sys] Save state to localstorage', groupId: 0, status: 0 },
+        { id: 4, title: '[OKR Sys] Save state to API', groupId: 0, status: 0 },
+
+        { id: 5, title: 'Sign up for Math C', groupId: 1, status: 0 },
+        { id: 6, title: 'Read up on first math module', groupId: 1, status: 0 },
+        { id: 6, title: 'GBZ audio wiring', groupId: 1, status: 0 },
+        { id: 6, title: 'Gift for the lady', groupId: 1, status: 0 },
+
+        { id: 7, title: 'some task ÆØÅ', groupId: -1, status: 0 },
+        { id: 8, title: 'some task ÆØÅ', groupId: -1, status: 0 },
     ]
 }
 
@@ -25,7 +33,7 @@ export const getGroupedTasks = (state) => {
         return { ...group,  tasks}
     });
 
-    return groups.sort((groupA, groupB) => groupA.id > groupB.id ? -1:1);
+    return groups.sort((groupA, groupB) => groupA.id < groupB.id ? -1:1);
 }
 
 export function updateTask(task) {

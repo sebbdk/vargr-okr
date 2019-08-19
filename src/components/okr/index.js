@@ -8,6 +8,7 @@ import OkrListName from './parts/list-name';
 import Objective from './parts/objective';
 import OkrTaskAdd from './parts/task-add';
 import OkrTask from './parts/task';
+import OkrAddGroup from './parts/add-group';
 
 import { getGroupedTasks, updateTask, addTask, updateObjective, updateKeyResult, updateListName } from '../../store/okr';
 
@@ -39,6 +40,7 @@ function groupedProps(groupedTasks, updateTask, addTask, updateListName ) {
 			<OkrListName value={group.title} onChange={title => updateListName(title, group.id)}></OkrListName>
 			{tasks}
 			<OkrTaskAdd groupId={group.id} onComplete={newTask => addTask(newTask)}></OkrTaskAdd>
+			<OkrAddGroup></OkrAddGroup>
 		</div>;
 	})
 }
