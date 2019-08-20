@@ -124,8 +124,35 @@ input[type="text"].okr-primary-objective  {
     position: relative;
 }
 
+.okr-task:after {
+    display: block;
+    content: " ";
+    border: 2px dotted #aaa;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.okr-task__dragger {
+    position: relative;
+    z-index: 1;
+    transition: all 100ms;
+}
+
+.okr-task__dragger.okr-task__dragger--active {
+    z-index: 2;
+    transition: none;
+}
+
 .okr-task.okr-task--done input[type="text"] {
     background-color: #ccc;
+}
+
+.okr-task.okr-task--add:after {
+    border: 0;
 }
 
 .okr-task.okr-task--add input[type="text"] {
@@ -147,13 +174,19 @@ input[type="text"].okr-primary-objective  {
     height: 2.5rem;
     padding-left: 2.5rem;
     box-sizing: border-box;
+    cursor: pointer;
+    transition: all 100ms;
+}
+
+.okr-task.okr-task--active input[type="text"] {
+    cursor: text;
 }
 
 .okr-task input[type="text"][readonly] {
     color: rgba(0,0,0, 0.6);
 }
 
-.okr-task input[type="text"]:focus {
+.okr-task input[type="text"]:focus, .okr-task input[type="text"]:hover {
     background-color: #DDD;
 }
 
