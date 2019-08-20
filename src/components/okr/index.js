@@ -46,8 +46,6 @@ function groupedProps(groupedTasks, updateTask, addTask, updateListName ) {
 }
 
 const Okr = ({ groupedTasks, updateTask, addTask, keyResults, objective, updateObjective, updateKeyResult, updateListName }) => {
-	console.log(objective)
-
 	return (
 		<div className="okr-page">
 			<div className="okr-page__content">
