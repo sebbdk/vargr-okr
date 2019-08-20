@@ -19,11 +19,11 @@ const OkrTaskAdd = ({ onComplete, groupId = -1 }) => {
   }
 
   return (
-    <div className="okr-task">
+    <div className="okr-task okr-task--add">
         <span className="okr-task__type" aria-label="cat" role="img">😸</span>
         <input
           type="text"
-          placeholder="Something to do..."
+          placeholder="Add a new task..."
           defaultValue={currentValue.title}
           onChange={evt => changed({title: evt.target.value})}
           onKeyPress={evt => onKeyUp(evt)}/>

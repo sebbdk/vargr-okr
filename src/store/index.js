@@ -10,7 +10,16 @@ const composeEnhancers = composeWithDevTools({
     serialize: true
 });
 
-export const store = createStore(rootReducer, composeEnhancers(
+function getLocalStorageState() {
+    const ls = localStorage.getItem('okr');
+    return ls ? JSON.parse(ls) : {};
+}
+
+export const store = createStore(rootReducer, getLocalStorageState(), composeEnhancers(
     //applyMiddleware(...middleware),
     // other store enhancers if any
 ));
+
+store.subscribe(state => {
+    localStorage.setItem('okr', JSON.stringify(store.getState()));
+});

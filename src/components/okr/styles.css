@@ -59,6 +59,7 @@ button {
 input[type="text"].okr-primary-objective  {
     display: block;
     font-size: 2em;
+    margin-bottom: 1rem;
     font-weight: bold;
 }
 
@@ -109,6 +110,11 @@ input[type="text"].okr-primary-objective  {
 }
 
 .okr-page {
+    height: 80vh;
+    overflow: auto;
+}
+
+.okr-page__content {
     max-width: 800px;
     margin: auto;
 }
@@ -116,6 +122,10 @@ input[type="text"].okr-primary-objective  {
 .okr-task {
     margin: 0.25rem;
     position: relative;
+}
+
+.okr-task.okr-task--done input[type="text"] {
+    background-color: #ccc;
 }
 
 .okr-task.okr-task--add input[type="text"] {
@@ -137,6 +147,10 @@ input[type="text"].okr-primary-objective  {
     height: 2.5rem;
     padding-left: 2.5rem;
     box-sizing: border-box;
+}
+
+.okr-task input[type="text"][readonly] {
+    color: rgba(0,0,0, 0.6);
 }
 
 .okr-task input[type="text"]:focus {

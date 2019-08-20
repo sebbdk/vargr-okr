@@ -31,12 +31,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 function groupedProps(groupedTasks, updateTask, addTask, updateListName ) {
-	return groupedTasks.map((group) => {
+	return groupedTasks.map((group, index) => {
 		const tasks = group.tasks.map((task, i) =>
-			<OkrTask task={task} key={i} onChange={updatedTask => updateTask(updatedTask)}></OkrTask>
+			<OkrTask task={task} key={i} disabled={task.disabled} onChange={updatedTask => updateTask(updatedTask)}></OkrTask>
 		);
 
-		return <div className="okr-task-list" key={group.id}>
+		return <div className="okr-task-list" key={index}>
 			<OkrListName value={group.title} onChange={title => updateListName(title, group.id)}></OkrListName>
 			{tasks}
 			<OkrTaskAdd groupId={group.id} onComplete={newTask => addTask(newTask)}></OkrTaskAdd>
@@ -50,13 +50,15 @@ const Okr = ({ groupedTasks, updateTask, addTask, keyResults, objective, updateO
 
 	return (
 		<div className="okr-page">
-			<Objective
-				keyResults={keyResults}
-				objective={objective}
-				onKeyResultChange={(val, i) => updateKeyResult(val, i)}
-				onObjectiveChange={val => updateObjective(val)}>
-			</Objective>
-			{groupedProps(groupedTasks, updateTask, addTask, updateListName)}
+			<div className="okr-page__content">
+				<Objective
+					keyResults={keyResults}
+					objective={objective}
+					onKeyResultChange={(val, i) => updateKeyResult(val, i)}
+					onObjectiveChange={val => updateObjective(val)}>
+				</Objective>
+				{groupedProps(groupedTasks, updateTask, addTask, updateListName)}
+			</div>
 		</div>
 	)
 }
