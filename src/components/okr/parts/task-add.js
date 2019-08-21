@@ -1,6 +1,6 @@
 import React from 'react'
 
-const OkrTaskAdd = ({ onComplete, groupId = -1 }) => {
+const OkrTaskAdd = ({ onComplete, groupId = undefined }) => {
   const defaultValue = { title: '', groupId };
   let currentValue = { ...defaultValue };
 
