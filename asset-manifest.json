@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/vargr-okr/static/css/main.f9c3a882.chunk.css",
+    "main.js": "/vargr-okr/static/js/main.b9731ebf.chunk.js",
+    "main.js.map": "/vargr-okr/static/js/main.b9731ebf.chunk.js.map",
+    "runtime~main.js": "/vargr-okr/static/js/runtime~main.08091c4a.js",
+    "runtime~main.js.map": "/vargr-okr/static/js/runtime~main.08091c4a.js.map",
+    "static/js/2.840c3559.chunk.js": "/vargr-okr/static/js/2.840c3559.chunk.js",
+    "static/js/2.840c3559.chunk.js.map": "/vargr-okr/static/js/2.840c3559.chunk.js.map",
+    "index.html": "/vargr-okr/index.html",
+    "precache-manifest.d782d1a76253d9fd660fd856e8be0356.js": "/vargr-okr/precache-manifest.d782d1a76253d9fd660fd856e8be0356.js",
+    "service-worker.js": "/vargr-okr/service-worker.js",
+    "static/css/main.f9c3a882.chunk.css.map": "/vargr-okr/static/css/main.f9c3a882.chunk.css.map",
+    "static/media/logo.svg": "/vargr-okr/static/media/logo.5d5d9eef.svg"
+  }
+}
