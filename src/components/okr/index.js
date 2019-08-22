@@ -10,7 +10,7 @@ import OkrTaskAdd from './parts/task-add';
 import OkrTask from './parts/task';
 import OkrAddGroup from './parts/add-group';
 
-import { getGroupedTasks, updateTask, addTask, updateObjective, updateKeyResult, updateListName, deleteTask, addGroupAfter, closeGroup } from '../../store/okr';
+import { getGroupedTasks, updateTask, addTask, updateObjective, updateKeyResult, updateListName, deleteTask, addGroupAfter, closeGroup } from '../../store/okr.actions';
 
 function mapStateToProps(state) {
 	return {
