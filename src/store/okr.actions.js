@@ -44,7 +44,7 @@ export const getGroupedTasks = (state) => {
 
     const backlogTasks = state.okr.tasks.filter(t => t.groupId === undefined);
 
-    groups.push({ title: 'Backlog tasks', id: -1, tasks: backlogTasks })
+    groups.push({ title: 'Backlog tasks', tasks: backlogTasks })
 
     return groups;
 }
