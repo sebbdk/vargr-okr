@@ -12,12 +12,12 @@ const Objective = ({keyResults = [], objective = '', onObjectiveChange, onAddKey
 
   return (
     <div className="okr-objective">
-        <input
+        <textarea
           type="text"
           className="okr-primary-objective"
           defaultValue={objective}
           onChange={evt => objectiveChanged(evt.target.value)}
-          placeholder="Okr primary goal" />
+          placeholder="Okr primary goal"></textarea>
         {keyResultJsx}
     </div>
   )

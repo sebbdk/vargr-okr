@@ -46,7 +46,7 @@ button {
     border-radius: 0.5rem;
 }
 
-.okr-objective input[type="text"] {
+.okr-objective textarea {
     width: 100%;
     border: 0px;
     padding: 0 0.5rem;
@@ -57,7 +57,7 @@ button {
     margin-bottom: 0;
 }
 
-input[type="text"].okr-primary-objective  {
+textarea.okr-primary-objective  {
     display: block;
     font-size: 2em;
     margin-bottom: 1rem;
@@ -111,7 +111,7 @@ input[type="text"].okr-primary-objective  {
 }
 
 .okr-page {
-    height: 80vh;
+    min-height: 80vh;
     overflow: auto;
 }
 
