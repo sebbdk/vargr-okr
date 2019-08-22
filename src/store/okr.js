@@ -22,6 +22,7 @@ export const initialState = {
         { id: 7, title: '[OKR Sys] Basic UI', groupId: 1, status: 1, enabled: false },
         { id: 8, title: '[OKR Sys] Basic task behavior', groupId: 1, status: 1, enabled: false },
         { id: 9, title: '[OKR Sys] Save state to localstorage', groupId: 1, status: 1, enabled: false },
+        { id: 9.1, title: '[OKR Sys] Deploy to Github page', groupId: 1, status: 1, enabled: false },
 
         { id: 10, title: 'Sign up for Math C', groupId: 2, status: 0, enabled: false },
         { id: 11, title: 'Read up on first math module', groupId: 2, status: 0, enabled: false },
