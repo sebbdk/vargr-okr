@@ -81,7 +81,7 @@ const OkrTask = ({ task, onChange, onWaste, disabled = true }) => {
   return (
     <div className={className} >
       <div className="okr-task__dragger" onMouseDown={handleMouseDown}>
-        <span className="okr-task__type" aria-label="cat" role="img">😸</span>
+        <span className="okr-task__type" aria-label="cat" role="img">T</span>
           <input
             type="text"
             onDoubleClick={onDoupleClick}

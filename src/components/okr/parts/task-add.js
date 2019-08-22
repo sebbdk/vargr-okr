@@ -20,7 +20,7 @@ const OkrTaskAdd = ({ onComplete, groupId = undefined }) => {
 
   return (
     <div className="okr-task okr-task--add">
-        <span className="okr-task__type" aria-label="cat" role="img">😸</span>
+        <span className="okr-task__type" aria-label="cat" role="img">T</span>
         <input
           type="text"
           placeholder="Add a new task..."

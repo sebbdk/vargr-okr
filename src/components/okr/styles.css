@@ -1,5 +1,6 @@
 html {
     font-size: 16px;
+    color: #1E2019;
 }
 
 input[type=checkbox] {
@@ -177,7 +178,7 @@ input[type="text"].okr-primary-objective  {
     font-size: 1rem;
     padding: 0.5rem;
     height: 2.5rem;
-    padding-left: 2.5rem;
+    padding-left: 3rem;
     box-sizing: border-box;
     cursor: pointer;
     transition: all 100ms;
@@ -212,11 +213,14 @@ input[type="text"].okr-primary-objective  {
     position: absolute;
     display: block;
     left: 0.5rem;
-    line-height: 2.5rem;
-    top: 0;
-    height: 100%;
-    width: 1rem;
+    line-height: 2rem;
+    top: 0.25rem;
+    height: 2rem;
+    width: 2rem;
     font-size: 1.5rem;
+    background-color: #393E41;
+    border-radius: 100%;
+    color: #fff;
 }
 
 .okr-add-group {
