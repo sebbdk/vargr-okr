@@ -55,7 +55,7 @@ export function addTask(task) {
 }
 
 export function updateObjective(primaryObjective) {
-    return { type: okrActions.addTask, primaryObjective };
+    return { type: okrActions.updatePrimaryObjective, primaryObjective };
 }
 
 export function updateKeyResult(keyResult, index) {
