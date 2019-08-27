@@ -121,7 +121,7 @@ textarea.okr-primary-objective  {
 }
 
 .okr-task {
-    margin: 0.25rem;
+    
     position: relative;
 }
 
@@ -147,6 +147,7 @@ textarea.okr-primary-objective  {
     z-index: 2;
     transition: none;
     box-shadow: 0px 0px 15px rgba(0,0,0, 0.2);
+    pointer-events: none;
 }
 
 .okr-task__dragger.okr-task__dragger--active input[type="text"] {
