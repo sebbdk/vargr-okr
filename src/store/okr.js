@@ -46,10 +46,17 @@ export const okrActions = {
     closeGroup: Symbol('close group'),
     moveTaskTo: Symbol('move task to'),
     updateState: Symbol('update state'),
+    setAll: Symbol('set tasks'),
 }
 
 export const okr = (state = { ...initialState }, action) => {
     switch(action.type) {
+        case okrActions.setAll: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
         case okrActions.moveTaskTo: {
             const moveTask = { ...state.tasks.find(t => t.id === action.taskId), groupId: action.groupId === -1 ? undefined : action.groupId };
             const allTasks = state.tasks.filter(t => t.id !== moveTask.id);
@@ -136,7 +143,7 @@ export const okr = (state = { ...initialState }, action) => {
                     groupId: undefined,
                     status: 0,
                     ...action.task,
-                    id: nanoid(),
+                    id: action.task.id ? action.task.id : nanoid(),
                     sort: state.tasks.reduce((acc,curr)=> curr.sort > acc ? curr.sort:acc, 0)+1
                 }
             ];

@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux';
 
 import './styles.css';
 
-import { getGroupedTasks, updateObjective, updateKeyResult} from '../../store/okr.actions';
+import { getGroupedTasks, updateObjective, updateKeyResult, getData } from '../../store/okr.actions';
+import { login } from '../../store/auth';
 
 import GroupedProps from './parts/grouped-props';
 import Objective from './parts/objective';
@@ -20,14 +21,26 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		updateObjective,
-		updateKeyResult
+		updateKeyResult,
+		login,
+		getData
 	}, dispatch);
 }
 
-const Okr = ({ keyResults, objective, updateObjective, updateKeyResult }) => {
+const Okr = ({ keyResults, objective, updateObjective, updateKeyResult, login, getData }) => {
+	function promptLogin() {
+		const username = prompt('What is your username?');
+		const password = prompt('What is your password?');
+
+		login(username, password);
+	}
+
 	return (
 		<div className="okr-page">
 			<div className="okr-page__content">
+				<br />
+				<button onClick={() => promptLogin()}>Login</button>
+				<button onClick={() => getData()}>Get data</button>
 				<Objective
 					keyResults={keyResults}
 					objective={objective}

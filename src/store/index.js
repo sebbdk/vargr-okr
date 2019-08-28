@@ -1,9 +1,12 @@
-import { combineReducers, createStore } from 'redux'
+import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 import { okr } from './okr';
+import { auth } from './auth';
 
 export const rootReducer = combineReducers({
-    okr
+    okr,
+    auth
 })
 
 const composeEnhancers = composeWithDevTools({
@@ -16,7 +19,7 @@ function getLocalStorageState() {
 }
 
 export const store = createStore(rootReducer, getLocalStorageState(), composeEnhancers(
-    //applyMiddleware(...middleware),
+    applyMiddleware(thunk),
     // other store enhancers if any
 ));
 

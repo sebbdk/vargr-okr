@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { updateState, moveTaskTo } from '../../../store/okr.actions';
+import { debounce } from '../../../lib/debounce';
 
 function mapStateToProps(state) {
 	return {
@@ -37,6 +38,8 @@ class OkrTask extends React.Component {
 
       this.props.onChange && this.props.onChange(currentValue);
     }
+
+    const debouncedChange = debounce(changed, 500);
 
     const onKeyUp = (evt) => {
       if (["Escape"].indexOf(evt.key) > -1) { // enter, escape
@@ -83,7 +86,7 @@ class OkrTask extends React.Component {
               onKeyDown={onKeyUp}
               placeholder="Something to do..."
               defaultValue={currentValue.title}
-              onChange={evt => changed({ title: evt.target.value })} />
+              onChange={evt => debouncedChange({ title: evt.target.value })} />
             <input
               type="checkbox"
               defaultChecked={currentValue.status === 1}
