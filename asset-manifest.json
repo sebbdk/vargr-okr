@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/vargr-okr/static/css/main.1b15d7bf.chunk.css",
-    "main.js": "/vargr-okr/static/js/main.f042623e.chunk.js",
-    "main.js.map": "/vargr-okr/static/js/main.f042623e.chunk.js.map",
+    "main.js": "/vargr-okr/static/js/main.f19e7abc.chunk.js",
+    "main.js.map": "/vargr-okr/static/js/main.f19e7abc.chunk.js.map",
     "runtime~main.js": "/vargr-okr/static/js/runtime~main.08091c4a.js",
     "runtime~main.js.map": "/vargr-okr/static/js/runtime~main.08091c4a.js.map",
-    "static/js/2.620303ca.chunk.js": "/vargr-okr/static/js/2.620303ca.chunk.js",
-    "static/js/2.620303ca.chunk.js.map": "/vargr-okr/static/js/2.620303ca.chunk.js.map",
+    "static/js/2.d92abb77.chunk.js": "/vargr-okr/static/js/2.d92abb77.chunk.js",
+    "static/js/2.d92abb77.chunk.js.map": "/vargr-okr/static/js/2.d92abb77.chunk.js.map",
     "index.html": "/vargr-okr/index.html",
-    "precache-manifest.f30de0514adac2d732125c6478e4ac19.js": "/vargr-okr/precache-manifest.f30de0514adac2d732125c6478e4ac19.js",
+    "precache-manifest.f1ba4ba4444106f6515bfa5cfdcaf8df.js": "/vargr-okr/precache-manifest.f1ba4ba4444106f6515bfa5cfdcaf8df.js",
     "service-worker.js": "/vargr-okr/service-worker.js",
     "static/css/main.1b15d7bf.chunk.css.map": "/vargr-okr/static/css/main.1b15d7bf.chunk.css.map",
     "static/media/logo.svg": "/vargr-okr/static/media/logo.5d5d9eef.svg"
