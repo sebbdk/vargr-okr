@@ -1,3 +1,4 @@
+import nanoid from 'nanoid';
 import { okrActions } from "./okr";
 
 export const serialize = function(obj) {
@@ -48,8 +49,11 @@ export function addTask(rawTask) {
         const sort = getState().okr.tasks.reduce((acc, curr) => {
             return curr.sort > acc ? curr.sort : acc;
         }, 0) + 1;
-        const defaultFields = {order: 0, status: 0, title:'', sort: 0, user: getState().auth.user._id};
+        const defaultFields = { order: 0, status: 0, title:'', sort: 0, user: getState().auth.user._id };
         const saveTask = { ...defaultFields, ...rawTask, group: rawTask.groupId, sort };
+        const tempTask = {  ...saveTask, id: nanoid() }
+
+        dispatch({ type: okrActions.addTask, task: tempTask });
 
         const req = await fetch('https://strapi.sebb.dk/okrtasks', {
             method: 'post',
@@ -69,7 +73,12 @@ export function addTask(rawTask) {
             sort
         }
 
-        dispatch({ type: okrActions.addTask, task });
+        if (req.status === 200) {
+            dispatch({ type: okrActions.deleteTask, id: tempTask.id });
+            dispatch({ type: okrActions.addTask, task });
+        } else {
+            console.error('Update task failed', req)
+        }
     }
 }
 
@@ -110,14 +119,16 @@ export function updateListName(title, id) {
 
 export function deleteTask(id) {
     return async (dispatch, getState) => {
+        const tempTask = getState().okr.tasks.find(t => t.id === id);
+        dispatch({ type: okrActions.deleteTask, id });
+
         const req = await fetch(`https://strapi.sebb.dk/okrtasks/${id}`, {
             method: 'delete',
             headers: { 'Authorization': 'Bearer ' + getState().auth.jwt, }
         });
 
-        if (req.status === 200) {
-            dispatch({ type: okrActions.deleteTask, id });
-        } else {
+        if (req.status !== 200) {
+            dispatch({ type: okrActions.addTask, task: tempTask });
             console.error('Update task failed', req)
         }
     }
