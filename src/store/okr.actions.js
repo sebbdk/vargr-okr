@@ -23,7 +23,7 @@ export function updateTask(rawTask) {
             title: rawTask.title,
             status: rawTask.status,
             sort: rawTask.sort,
-            groupId: rawTask.group
+            groupId: rawTask.groupId
         }
 
         dispatch({ type: okrActions.updateTask, task });
@@ -50,10 +50,16 @@ export function addTask(rawTask) {
                 return curr.sort > acc ? curr.sort : acc;
         }, 0) + 1;
         const defaultFields = { order: 0, status: 0, title:'', sort: 0, user: getState().auth.user._id };
-        const saveTask = { ...defaultFields, ...rawTask, group: rawTask.groupId, sort };
+        const saveTask = { ...defaultFields, ...rawTask, okrtaskgroup: rawTask.groupId, sort };
+
         const tempTask = {  ...saveTask, id: nanoid() }
 
         dispatch({ type: okrActions.addTask, task: tempTask });
+
+        delete saveTask.groupId
+        if(saveTask.okrtaskgroup === undefined || saveTask.okrtaskgroup === -1) {
+            delete saveTask.okrtaskgroup
+        }
 
         const req = await fetch('https://strapi.sebb.dk/okrtasks', {
             method: 'post',
@@ -69,7 +75,7 @@ export function addTask(rawTask) {
             id: resTask.id,
             title: resTask.title,
             status: resTask.status,
-            groupId: resTask.group,
+            groupId: resTask.okrtaskgroup.id,
             sort
         }
 
