@@ -47,7 +47,7 @@ export function updateTask(rawTask) {
 export function addTask(rawTask) {
     return async (dispatch, getState) => {
         const sort = getState().okr.tasks.reduce((acc, curr) => {
-            return curr.sort > acc ? curr.sort : acc;
+                return curr.sort > acc ? curr.sort : acc;
         }, 0) + 1;
         const defaultFields = { order: 0, status: 0, title:'', sort: 0, user: getState().auth.user._id };
         const saveTask = { ...defaultFields, ...rawTask, group: rawTask.groupId, sort };
@@ -134,10 +134,51 @@ export function deleteTask(id) {
     }
 }
 
-export function addGroupAfter(group, afterId) {
-    console.log(group, afterId)
+export function addGroupBefore(rawGroup, beforeId) {
+    return async (dispatch, getState) => {
+        const state = getState();
+        let sort = 0;
+ 
+        // Figure out sort value
+        const beforeGroup = state.okr.taskGroups.find(g => g.id === beforeId);
+        if(beforeGroup !== undefined) {
+            const beforeGroupIndex = state.okr.taskGroups.indexOf(beforeGroup);
+            const postVal = beforeGroup.sort;
+            const prevVal = state.okr.taskGroups[beforeGroupIndex-1] ? state.okr.taskGroups[beforeGroupIndex-1].sort : postVal-1;
+            sort = prevVal + ((postVal - prevVal) / 2);
+        }
 
-    return { type: okrActions.addGroupAfter, afterId, group};
+        console.log(sort)
+        
+
+        const saveGroup = { ...rawGroup, sort, user: getState().auth.user._id };
+        const tempGroup = {  ...saveGroup, id: nanoid() }
+
+        dispatch({ type: okrActions.addGroup, group: tempGroup });
+
+        const req = await fetch('https://strapi.sebb.dk/okrtaskgroups', {
+            method: 'post',
+            headers: {
+                'Authorization': 'Bearer ' + getState().auth.jwt,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: serialize(saveGroup)
+        });
+
+        const resGroup = await req.json();
+        const group = {
+            id: resGroup.id,
+            title: resGroup.title,
+            sort: resGroup.sort
+        }
+
+        if (req.status === 200) {
+            dispatch({ type: okrActions.deleteGroup, id: tempGroup.id });
+            dispatch({ type: okrActions.addGroup, group });
+        } else {
+            console.error('add group failed', req)
+        }
+    }
 }
 
 export function closeGroup(id) {
@@ -162,6 +203,7 @@ export function getData() {
         const tasks = res.okrtasks.map(i => ({
             id: i._id,
             title: i.title,
+            groupId: i.okrtaskgroup,
             status: i.status,
             sort: i.sort
         }));
@@ -189,5 +231,5 @@ export const getGroupedTasks = (state) => {
 
     groups.push({ title: 'Backlog tasks', tasks: backlogTasks })
 
-    return groups;
+    return groups.sort((g1, g2) => g1.sort < g2.sort ? -1 : 1);
 }

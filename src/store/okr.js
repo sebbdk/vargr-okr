@@ -8,8 +8,8 @@ export const initialState = {
         'Get detailed gold trading data for last 5 years'
     ],
     taskGroups: [
-        { title: 'Current sprint!', id: 1 },
-        { title: 'Some future sprint!', id: 2 }
+        { title: 'Current sprint!', id: 1, sort: 0 },
+        { title: 'Some future sprint!', id: 2, sort: 1 }
     ],
     tasks: [
         // add sort row...
@@ -42,7 +42,8 @@ export const okrActions = {
     updateKeyResult: Symbol('Update key result'),
     updateGroupTitle: Symbol('Update group title'),
     deleteTask: Symbol('Delete task'),
-    addGroupAfter: Symbol('Add group after'),
+    deleteGroup: Symbol('Delete group'),
+    addGroup: Symbol('Add group'),
     closeGroup: Symbol('close group'),
     updateState: Symbol('update state'),
     setAll: Symbol('set tasks'),
@@ -82,17 +83,22 @@ export const okr = (state = { ...initialState }, action) => {
                 keyResults
             }
         }
-        case okrActions.addGroupAfter: {
-            const afterGroup = state.taskGroups.find(g => g.id === action.afterId);
-            const afterIndex = state.taskGroups.indexOf(afterGroup);
-            const newGroup = { ...action.group, id: nanoid() };
-
-            const newGroups = [ ...state.taskGroups ]
-            newGroups.splice(afterIndex+1, 0, newGroup);
-
+        case okrActions.addGroup: {
             return {
                 ...state,
-                taskGroups: newGroups
+                taskGroups: [
+                    ...state.taskGroups,
+                    {
+                        id: action.group.id ? action.group.id : nanoid(),
+                        ...action.group
+                    }
+                ]
+            }
+        }
+        case okrActions.deleteGroup: {
+            return {
+                ...state,
+                taskGroups: state.taskGroups.filter(g => g.id !== action.id)
             }
         }
         case okrActions.updatePrimaryObjective: {
