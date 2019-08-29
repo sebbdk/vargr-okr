@@ -44,7 +44,6 @@ export const okrActions = {
     deleteTask: Symbol('Delete task'),
     addGroupAfter: Symbol('Add group after'),
     closeGroup: Symbol('close group'),
-    moveTaskTo: Symbol('move task to'),
     updateState: Symbol('update state'),
     setAll: Symbol('set tasks'),
 }
@@ -56,20 +55,6 @@ export const okr = (state = { ...initialState }, action) => {
                 ...state,
                 ...action.data
             }
-        }
-        case okrActions.moveTaskTo: {
-            const moveTask = { ...state.tasks.find(t => t.id === action.taskId), groupId: action.groupId === -1 ? undefined : action.groupId };
-            const allTasks = state.tasks.filter(t => t.id !== moveTask.id);
-            const otherTasks = allTasks.filter(t => t.groupId !== action.groupId);
-            let groupTasks = allTasks.filter(t => t.groupId === action.groupId).sort((t1, t2) => t1.sort < t2.sort ? -1 : 1);
-
-            groupTasks.splice(action.index, 0, moveTask);
-            groupTasks = groupTasks.map((t,index) => ({...t, sort: index}));
-
-            return {
-                ...state,
-                tasks: [ ...otherTasks, ...groupTasks ]
-            };
         }
         case okrActions.closeGroup: {
             const tasks = state.tasks.map(t => {
