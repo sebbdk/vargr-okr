@@ -97,12 +97,18 @@ export function updateKeyResult(keyResult, index) {
 }
 
 export function moveTaskTo(taskId, index, groupId) {
+    groupId = groupId !== -1 ? groupId:undefined;
+
     return async (dispatch, getState) => {
         const state = getState();
         const tasks = state.okr.tasks
-            .filter(t => t.groupId !== groupId)
+            .filter(t => t.groupId === groupId)
             .filter(t => t.id !== taskId)
             .sort((t1,t2) => t1.sort < t2.sort ? -1 : 1);
+
+        // this is still odd for the backlog
+        // Should be empty for -1 groupId ??!
+        // console.log(groupId, tasks)
 
         const task = state.okr.tasks.find(t => t.id === taskId);
 
@@ -153,9 +159,6 @@ export function addGroupBefore(rawGroup, beforeId) {
             const prevVal = state.okr.taskGroups[beforeGroupIndex-1] ? state.okr.taskGroups[beforeGroupIndex-1].sort : postVal-1;
             sort = prevVal + ((postVal - prevVal) / 2);
         }
-
-        console.log(sort)
-        
 
         const saveGroup = { ...rawGroup, sort, user: getState().auth.user._id };
         const tempGroup = {  ...saveGroup, id: nanoid() }
@@ -227,7 +230,9 @@ export const getGroupedTasks = (state) => {
     const groups = state.okr.taskGroups
         .filter(g => g.deleted !== true)
         .map((group) => {
-            const tasks = state.okr.tasks.filter(task => task.groupId === group.id).sort((ta, tb) => ta.sort > tb.sort ? 1:-1 );
+            const tasks = state.okr.tasks
+                .filter(task => task.groupId === group.id)
+                .sort((ta, tb) => ta.sort > tb.sort ? 1:-1 );
             return { ...group,  tasks}
         });
 
