@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6725980de0fd8035277948b6ae183639",
+    "revision": "5c34eb766d843c5ca18718c1cf02dad7",
     "url": "/vargr-okr/index.html"
   },
   {
-    "revision": "9ca18e48d89df2bb391b",
+    "revision": "c73268804ad8a67ef47a",
     "url": "/vargr-okr/static/css/main.1b15d7bf.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/vargr-okr/static/js/2.a2eee32e.chunk.js"
   },
   {
-    "revision": "9ca18e48d89df2bb391b",
-    "url": "/vargr-okr/static/js/main.278be3f3.chunk.js"
+    "revision": "c73268804ad8a67ef47a",
+    "url": "/vargr-okr/static/js/main.5dda5126.chunk.js"
   },
   {
     "revision": "aa829efc5fc5aebe0d0c",
