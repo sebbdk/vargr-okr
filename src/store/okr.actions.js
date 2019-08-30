@@ -198,7 +198,7 @@ export function updateState(state) {
     return { type: okrActions.updateState, state};
 }
 
-export function getData() {
+export function synchronize() {
     return async (dispatch, getState) => {
         const req = await fetch('https://strapi.sebb.dk/users/me', {
             method: 'get',
@@ -223,6 +223,14 @@ export function getData() {
         }));
 
         dispatch({ type: okrActions.setAll, data: { tasks, taskGroups } });
+    }
+}
+
+export function synchronizeIfAuthenticated() {
+    return async (dispatch, getState) => {
+        if(getState().auth.user) {
+            synchronize()(dispatch, getState);
+        }
     }
 }
 
