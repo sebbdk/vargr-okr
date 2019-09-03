@@ -10,13 +10,15 @@ export const serialize = function(obj) {
     return str.join("&");
   }
 
-export function updateTask(rawTask) {
+export function updateTask(rawTask, replace = false) {
     return async (dispatch, getState) => {
         const originalTask = getState().okr.tasks.filter(t => t.id === rawTask.id);
-        const defaultFields = {order: 0, status: 0, sort: 0, title:'', user: getState().auth.user._id}
-        const saveTask = { ...defaultFields, ...rawTask, group: rawTask.groupId }
-        delete saveTask.id;
-        delete saveTask.groupId;
+        const defaultFields = {status: 0, sort: 0, title:'', user: getState().auth.user._id}
+        const saveTask = { ...defaultFields, ...rawTask, okrtaskgroup: rawTask.groupId, __v: 0, id: "5d6994b3f236585b2605158f" };
+
+        if(saveTask.okrtaskgroup === undefined || saveTask.okrtaskgroup === -1) {
+            delete saveTask.okrtaskgroup
+        }
 
         const task = {
             id: rawTask.id,
@@ -26,7 +28,7 @@ export function updateTask(rawTask) {
             groupId: rawTask.groupId
         }
 
-        dispatch({ type: okrActions.updateTask, task });
+        dispatch({ type: okrActions.updateTask, task, replace });
 
         const req = await fetch(`https://strapi.sebb.dk/okrtasks/${rawTask.id}`, {
             method: 'put',
@@ -38,7 +40,7 @@ export function updateTask(rawTask) {
         });
 
         if (req.status !== 200) {
-            dispatch({ type: okrActions.updateTask, originalTask });
+            dispatch({ type: okrActions.updateTask, task: originalTask, replace: true });
             console.error('Update task failed', req)
         }
     }
@@ -75,7 +77,7 @@ export function addTask(rawTask) {
             id: resTask.id,
             title: resTask.title,
             status: resTask.status,
-            groupId: resTask.okrtaskgroup.id,
+            groupId: resTask.okrtaskgroup ? resTask.okrtaskgroup.id : undefined,
             sort
         }
 
@@ -106,9 +108,6 @@ export function moveTaskTo(taskId, index, groupId) {
             .filter(t => t.id !== taskId)
             .sort((t1,t2) => t1.sort < t2.sort ? -1 : 1);
 
-        // this is still odd for the backlog
-        // Should be empty for -1 groupId ??!
-        // console.log(groupId, tasks)
 
         const task = state.okr.tasks.find(t => t.id === taskId);
 
@@ -120,13 +119,16 @@ export function moveTaskTo(taskId, index, groupId) {
 
         updateTask({
             ...task,
-            sort
+            sort,
+            groupId
         })(dispatch, getState);
     }
 }
 
 export function updateListName(title, id) {
-    return { type: okrActions.updateGroupTitle, title, id };
+    return (dispatch, getState) => {
+        updateGroup({ id, title })(dispatch, getState);
+    }
 }
 
 export function deleteTask(id) {
@@ -154,9 +156,10 @@ export function addGroupBefore(rawGroup, beforeId) {
         // Figure out sort value
         const beforeGroup = state.okr.taskGroups.find(g => g.id === beforeId);
         if(beforeGroup !== undefined) {
-            const beforeGroupIndex = state.okr.taskGroups.indexOf(beforeGroup);
+            const groups = state.okr.taskGroups.filter(g => !g.deleted);
+            const beforeGroupIndex = groups.indexOf(beforeGroup);
             const postVal = beforeGroup.sort;
-            const prevVal = state.okr.taskGroups[beforeGroupIndex-1] ? state.okr.taskGroups[beforeGroupIndex-1].sort : postVal-1;
+            const prevVal = groups[beforeGroupIndex-1] ? groups[beforeGroupIndex-1].sort : postVal-1;
             sort = prevVal + ((postVal - prevVal) / 2);
         }
 
@@ -191,7 +194,37 @@ export function addGroupBefore(rawGroup, beforeId) {
 }
 
 export function closeGroup(id) {
-    return { type: okrActions.closeGroup, id};
+    return async (dispatch, getState) => {
+        const state = getState();
+        const group = { ...state.okr.taskGroups.find(g => g.id === id), deleted: true };
+        updateGroup(group)(dispatch, getState);
+    }
+}
+
+export function updateGroup(group) {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const originalGroup = state.okr.taskGroups.find(g => g.id === group.id);
+
+        dispatch({ type: okrActions.updateGroup, group})
+
+        const req = await fetch(`https://strapi.sebb.dk/okrtaskgroups/${group.id}`, {
+            method: 'put',
+            headers: {
+                'Authorization': 'Bearer ' + state.auth.jwt,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: serialize(group)
+        });
+
+        if (req.status !== 200) {
+            dispatch({ type: okrActions.updateGroup, group: originalGroup, replace: true})
+            console.error('add group failed', req);
+            return false;
+        }
+
+        return true;
+    }
 }
 
 export function updateState(state) {
@@ -217,9 +250,11 @@ export function synchronize() {
             sort: i.sort
         }));
 
-        const taskGroups = res.okrtaskgroups.map(i => ({
+        const taskGroups = res.okrtaskgroups.filter(g => !g.deleted).map(i => ({
             id: i._id,
-            title: i.title
+            title: i.title,
+            deleted: i.deleted,
+            sort: i.sort
         }));
 
         dispatch({ type: okrActions.setAll, data: { tasks, taskGroups } });
@@ -244,8 +279,10 @@ export const getGroupedTasks = (state) => {
             return { ...group,  tasks}
         });
 
+    const deletedGroupIds = state.okr.taskGroups.filter(g => g.deleted === true).map(g => g.id);
+
     const backlogTasks = state.okr.tasks
-        .filter(t => t.groupId === undefined)
+        .filter(t => t.groupId === undefined || deletedGroupIds.indexOf(t.groupId) > -1)
         .sort((ta, tb) => ta.sort > tb.sort ? 1 : -1 );
 
     groups.push({ title: 'Backlog tasks', tasks: backlogTasks })

@@ -40,11 +40,10 @@ export const okrActions = {
     addTask: Symbol('Add task'),
     updatePrimaryObjective: Symbol('Update primary objective'),
     updateKeyResult: Symbol('Update key result'),
-    updateGroupTitle: Symbol('Update group title'),
+    updateGroup: Symbol('Update group'),
     deleteTask: Symbol('Delete task'),
     deleteGroup: Symbol('Delete group'),
     addGroup: Symbol('Add group'),
-    closeGroup: Symbol('close group'),
     updateState: Symbol('update state'),
     setAll: Symbol('set tasks'),
 }
@@ -57,30 +56,31 @@ export const okr = (state = { ...initialState }, action) => {
                 ...action.data
             }
         }
-        case okrActions.closeGroup: {
-            const tasks = state.tasks.map(t => {
-                return t.groupId !== action.id || t.status === 1 ? t : {...t, groupId: undefined}
-            })
-            const taskGroups = state.taskGroups.map(g => g.id !== action.id ? g : {...g, deleted: true})
 
-            return { ...state, taskGroups, tasks }
-        }
-        case okrActions.updateGroupTitle: {
-            const taskGroups = state.taskGroups.map(g => {
-                return g.id === action.id ? { ...g, title: action.title }:g;
-            });
-
-            return {
-                ...state,
-                taskGroups
-            }
-        }
         case okrActions.updateKeyResult: {
             const keyResults = [ ...state.keyResults ];
             keyResults[action.index] = action.keyResult;
             return {
                 ...state,
                 keyResults
+            }
+        }
+        case okrActions.updateGroup: {
+            const taskGroups = state.taskGroups.map(g => {
+                if (g.id === action.group.id) {
+                    if (action.replace === true) {
+                        return action.group
+                    } else {
+                        return {...g, ...action.group};
+                    }
+                }
+
+                return g;
+            });
+
+            return {
+                ...state,
+                taskGroups
             }
         }
         case okrActions.addGroup: {
@@ -120,7 +120,17 @@ export const okr = (state = { ...initialState }, action) => {
             }
         }
         case okrActions.updateTask: {
-            const tasks = state.tasks.map(task => task.id === action.task.id ? {...task, ...action.task} : task);
+            const tasks = state.tasks.map(t => {
+                if (t.id === action.task.id) {
+                    if (action.replace === true) {
+                        return action.task
+                    } else {
+                        return {...t, ...action.task};
+                    }
+                }
+
+                return t;
+            });
 
             return {
                 ...state,
