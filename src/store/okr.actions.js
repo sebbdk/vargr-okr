@@ -308,10 +308,11 @@ export const getGroupedTasks = (state) => {
             return { ...group,  tasks}
         });
 
-    const deletedGroupIds = state.okr.taskGroups.filter(g => g.deleted === true).map(g => g.id);
+    const groupIds = state.okr.taskGroups.map(g => g.id);
 
     const backlogTasks = state.okr.tasks
-        .filter(t => t.groupId === undefined || deletedGroupIds.indexOf(t.groupId) > -1)
+        .filter(t => groupIds.indexOf(t.groupId) === -1)
+        .filter(t => t.status === 0)
         .sort((ta, tb) => ta.sort > tb.sort ? 1 : -1 );
 
     groups.push({ title: 'Backlog tasks', tasks: backlogTasks })
