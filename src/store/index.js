@@ -3,11 +3,13 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { okr } from './okr';
 import { auth } from './auth';
+import { user } from './user';
 import { synchronizeIfAuthenticated } from './okr.actions';
 
 export const rootReducer = combineReducers({
     okr,
-    auth
+    auth,
+    user
 })
 
 const composeEnhancers = composeWithDevTools({

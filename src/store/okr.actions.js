@@ -1,5 +1,6 @@
 import nanoid from 'nanoid';
 import { okrActions } from "./okr";
+import { userActions } from './user';
 
 export const serialize = function(obj) {
     var str = [];
@@ -231,8 +232,12 @@ export function updateState(state) {
     return { type: okrActions.updateState, state};
 }
 
-export function synchronize() {
+export function synchronizeMe(useCache = true) {
     return async (dispatch, getState) => {
+        if (useCache && getState().user.id !== undefined) {
+            return;
+        }
+
         const req = await fetch('https://strapi.sebb.dk/users/me', {
             method: 'get',
             headers: {
@@ -257,14 +262,38 @@ export function synchronize() {
             sort: i.sort
         }));
 
+        dispatch({ type: userActions.set, state: { id: res._id, username: res.username, email: res.email }});
         dispatch({ type: okrActions.setAll, data: { tasks, taskGroups } });
+    }
+}
+
+export function synchronizeTasks() {
+    return async (dispatch, getState) => {
+        await synchronizeMe()(dispatch, getState);
+
+        const res = await (await fetch(`https://strapi.sebb.dk/okrtasks?user=${getState().user.id}&status=0`, {
+            method: 'get',
+            headers: {
+                'Authorization': 'Bearer ' + getState().auth.jwt
+            }
+        })).json();
+
+        const tasks = res.map(i => ({
+            id: i._id,
+            title: i.title,
+            groupId: i.okrtaskgroup,
+            status: i.status,
+            sort: i.sort
+        }));
+
+        dispatch({ type: okrActions.setAll, data: { tasks } });
     }
 }
 
 export function synchronizeIfAuthenticated() {
     return async (dispatch, getState) => {
         if(getState().auth.user) {
-            synchronize()(dispatch, getState);
+            synchronizeMe()(dispatch, getState);
         }
     }
 }

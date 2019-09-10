@@ -125,6 +125,12 @@ textarea.okr-primary-objective  {
     position: relative;
 }
 
+.okr-group-placeholder {
+    height: 2.5rem;
+    border: 2px dotted grey;
+    background-color: #eee;
+}
+
 .okr-task:after {
     display: block;
     content: " ";
