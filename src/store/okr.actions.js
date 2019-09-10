@@ -14,7 +14,7 @@ export const serialize = function(obj) {
 export function updateTask(rawTask, replace = false) {
     return async (dispatch, getState) => {
         const originalTask = getState().okr.tasks.filter(t => t.id === rawTask.id);
-        const defaultFields = {status: 0, sort: 0, title:'', user: getState().auth.user._id}
+        const defaultFields = {status: 0, sort: 0, title:'', user: getState().user.id}
         const saveTask = { ...defaultFields, ...rawTask, okrtaskgroup: rawTask.groupId, __v: 0, id: "5d6994b3f236585b2605158f" };
 
         if(saveTask.okrtaskgroup === undefined || saveTask.okrtaskgroup === -1) {
@@ -52,7 +52,7 @@ export function addTask(rawTask) {
         const sort = getState().okr.tasks.reduce((acc, curr) => {
                 return curr.sort > acc ? curr.sort : acc;
         }, 0) + 1;
-        const defaultFields = { order: 0, status: 0, title:'', sort: 0, user: getState().auth.user._id };
+        const defaultFields = { order: 0, status: 0, title:'', sort: 0, user: getState().user.id };
         const saveTask = { ...defaultFields, ...rawTask, okrtaskgroup: rawTask.groupId, sort };
 
         const tempTask = {  ...saveTask, id: nanoid() }
@@ -164,7 +164,7 @@ export function addGroupBefore(rawGroup, beforeId) {
             sort = prevVal + ((postVal - prevVal) / 2);
         }
 
-        const saveGroup = { ...rawGroup, sort, user: getState().auth.user._id };
+        const saveGroup = { ...rawGroup, sort, user: getState().user.id };
         const tempGroup = {  ...saveGroup, id: nanoid() }
 
         dispatch({ type: okrActions.addGroup, group: tempGroup });
@@ -271,7 +271,7 @@ export function synchronizeTasks() {
     return async (dispatch, getState) => {
         await synchronizeMe()(dispatch, getState);
 
-        const res = await (await fetch(`https://strapi.sebb.dk/okrtasks?user=${getState().user.id}&status=0`, {
+        const res = await (await fetch(`https://strapi.sebb.dk/okrtasks?user=${getState().user.id}`, {
             method: 'get',
             headers: {
                 'Authorization': 'Bearer ' + getState().auth.jwt
@@ -281,7 +281,7 @@ export function synchronizeTasks() {
         const tasks = res.map(i => ({
             id: i._id,
             title: i.title,
-            groupId: i.okrtaskgroup,
+            groupId: i.okrtaskgroup ? i.okrtaskgroup._id : undefined,
             status: i.status,
             sort: i.sort
         }));
