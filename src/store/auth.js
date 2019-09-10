@@ -1,5 +1,7 @@
+import { synchronizeMe, synchronizeTasks } from "./okr.actions";
+
 export const authActions = {
-    UPDATE: Symbol('update')
+    set: Symbol('set auth state')
 }
 
 export function login(username, password) {
@@ -15,11 +17,19 @@ export function login(username, password) {
         const res = await req.json();
 
         dispatch({
-            type: authActions.UPDATE,
-            data: {
-                ...res
+            type: authActions.set,
+            state: {
+                jwt: res.jwt
             }
         });
+    }
+}
+
+export function loginAndSync(username, password) {
+    return async (dispatch, getState) => {
+        await login(username, password)(dispatch, getState);
+        await synchronizeMe()(dispatch, getState);
+        await synchronizeTasks()(dispatch, getState);
     }
 }
 
@@ -27,10 +37,10 @@ export const initialState = {}
 
 export const auth = (state = { ...initialState }, action) => {
     switch(action.type) {
-        case authActions.UPDATE: {
+        case authActions.set: {
             return {
                 ...state,
-                ...action.data
+                ...action.state
             };
         }
         default:

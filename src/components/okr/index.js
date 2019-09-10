@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import './styles.css';
 
 import { getGroupedTasks, updateObjective, updateKeyResult, synchronizeMe } from '../../store/okr.actions';
-import { login } from '../../store/auth';
+import { loginAndSync } from '../../store/auth';
 
 import GroupedProps from './parts/grouped-props';
 import Objective from './parts/objective';
@@ -22,17 +22,17 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		updateObjective,
 		updateKeyResult,
-		login,
+		loginAndSync,
 		synchronizeMe
 	}, dispatch);
 }
 
-const Okr = ({ keyResults, objective, updateObjective, updateKeyResult, login, synchronizeMe }) => {
+const Okr = ({ keyResults, objective, updateObjective, updateKeyResult, loginAndSync, synchronizeMe }) => {
 	function promptLogin() {
 		const username = prompt('What is your username?');
 		const password = prompt('What is your password?');
 
-		login(username, password);
+		loginAndSync(username, password);
 	}
 
 	return (

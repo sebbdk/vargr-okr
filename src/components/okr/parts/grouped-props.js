@@ -54,7 +54,7 @@ export const GroupedProps = ({groupedTasks, updateTask, addTask, updateListName,
                     <Droppable droppableId={group.id || -1}>
                     {(provided, snapshot) => (
                         <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
-                            {group.tasks.length > 0 ? '' : <div class="okr-group-placeholder"></div>}
+                            {group.tasks.length > 0 ? '' : <div className="okr-group-placeholder"></div>}
                             {group.tasks.map((item, index) => (
                                 <Draggable key={item.id} draggableId={item.id} index={index}>
                                     {(provided, snapshot) => (
